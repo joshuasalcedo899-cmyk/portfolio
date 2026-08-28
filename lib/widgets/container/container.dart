@@ -16,6 +16,6 @@ class _ContainerBoxState extends State<ContainerBox> {
 
   @override
   Widget build(BuildContext context) {
-      return VideoBackground(widget.imagePath, widget.name, onTap: widget.onTap);
+      return VideoBackground(widget.name, widget.imagePath, onTap: widget.onTap);
   }
 }

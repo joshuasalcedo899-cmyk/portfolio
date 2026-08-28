@@ -28,7 +28,7 @@ class HomeView extends StatelessWidget {
                   Expanded(
                     child: ContainerBox(
                       'Projects',
-                      'assets/projects.webp',
+                      'assets/project.webp',
                       onTap: () {
                         showDialog(
                           context: context,
@@ -86,7 +86,7 @@ class HomeView extends StatelessWidget {
                   Expanded(
                     child: ContainerBox(
                       'Contacts',
-                      'assets/contacts.webp',
+                      'assets/contact.webp',
                       onTap: () {
                         showDialog(
                           context: context,

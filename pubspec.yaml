@@ -62,17 +62,8 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets: 
-     - assets\contacts\email.png
-     - assets\contacts\facebook.png
-     - assets\contacts\github.png
-     - assets\contacts\linkedin.png
-     - assets\contacts\phone-call.png
-     - assets/ARIA.png
-     - assets/projects.webp
-     - assets/resume.webp
-     - assets/skills.webp
-     - assets/contacts.webp
-     - assets/about_me.webp
+    - assets/
+    - assets/contacts/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

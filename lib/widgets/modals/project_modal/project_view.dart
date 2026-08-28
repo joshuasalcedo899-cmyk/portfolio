@@ -53,6 +53,7 @@ class ProjectView extends StatelessWidget {
                     title: project['title']! as String,
                     image: project['image']! as String,
                     bgColor: project['bgColor']! as Color,
+                    tags: ['Unity', 'C#', 'Python', 'AI', 'AR', 'Chatbot'],
                   );
                 },
               ),

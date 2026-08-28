@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_testing/widgets/contact/contact.dart';
-import 'package:flutter_testing/widgets/video_background/gif_renderer.dart';
 import 'package:flutter_testing/widgets/video_background/overlay_button.dart';
 
 class VideoBackground extends StatefulWidget {
-  final String path;
   final String title;
+  final String imgPath;
   final VoidCallback onTap;
   const VideoBackground(
-    this.path,
-    this.title, {
+    this.title,
+    this.imgPath, {
     super.key,
     required this.onTap,
   });
@@ -29,18 +28,16 @@ class _VideoBackgroundState extends State<VideoBackground> {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          GifRenderer(widget.path),
-
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(widget.imgPath),
+                fit: BoxFit.fill,
+              )
+            )),
           if (isHovered) ...[
-            GifRenderer(widget.path),
             OverlayButton(widget.title, onTap: widget.onTap),
-        ]else Container (
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/ARIA.png'),
-              fit: BoxFit.cover,)
-            )
-        ),
+          ],
           if (isHovered && widget.title == 'Contacts') Contact(widget.title),
         ],
       ),

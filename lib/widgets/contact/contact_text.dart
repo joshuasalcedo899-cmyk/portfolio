@@ -7,21 +7,24 @@ class ContactText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Image.asset(
-          iconPath,
-          width: 20.0,
-        ),
-        Text(
-          ' : $title',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 14.0,
-            fontWeight: FontWeight.bold,
+    return Expanded(
+      child: Row(
+        children: [
+          Image.asset(
+            iconPath,
+            width: 20.0,
           ),
-        ),
-      ],
+          Text(
+            ' : $title',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 14.0,
+              fontWeight: FontWeight.bold,
+              overflow: TextOverflow.ellipsis
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
