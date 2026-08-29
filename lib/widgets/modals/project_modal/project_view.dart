@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_testing/widgets/modals/project_modal/project_card.dart';
+import 'package:flutter_testing/widgets/modals/project_modal/project_list.dart';
 
 class ProjectView extends StatelessWidget {
-  final projects = [
-    {'title': 'ARIA', 'image': 'assets/ARIA.png', 'bgColor': Colors.black},
-    {'title': 'Automated Mail Tracker', 'image': 'assets/contacts/facebook.png', 'bgColor': Colors.white},
-  ];
-  ProjectView({super.key});
+  const ProjectView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      backgroundColor: Colors.white,
       child: Container(
         width: 1200,
         padding: const EdgeInsets.all(30),
@@ -39,6 +37,7 @@ class ProjectView extends StatelessWidget {
             SizedBox(
               height: 400,
               child: GridView.builder(
+                padding: EdgeInsets.all(10),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 4,
                   crossAxisSpacing: 20,
@@ -52,8 +51,8 @@ class ProjectView extends StatelessWidget {
                   return ProjectCard(
                     title: project['title']! as String,
                     image: project['image']! as String,
-                    bgColor: project['bgColor']! as Color,
-                    tags: ['Unity', 'C#', 'Python', 'AI', 'AR', 'Chatbot'],
+                    route: project['route']! as String,
+                    tags: List<String>.from(project['tags']! as List),
                   );
                 },
               ),

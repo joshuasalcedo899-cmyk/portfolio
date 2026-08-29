@@ -38,7 +38,6 @@ class _VideoBackgroundState extends State<VideoBackground> {
           if (isHovered) ...[
             OverlayButton(widget.title, onTap: widget.onTap),
           ],
-          if (isHovered && widget.title == 'Contacts') Contact(widget.title),
         ],
       ),
     );

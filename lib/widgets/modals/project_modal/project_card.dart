@@ -1,31 +1,58 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_testing/constants/app_colors.dart';
 import 'package:flutter_testing/widgets/modals/project_modal/project_tags.dart';
+import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProjectCard extends StatelessWidget {
   final String title;
   final String image;
-  final Color bgColor;
+  final String route;
   final List<String> tags;
 
   const ProjectCard({
     super.key,
     required this.title,
     required this.image,
-    required this.bgColor,
+    required this.route,
     required this.tags,
   });
+
+  Future<void> openProject(String route) async {
+  final url = Uri.parse(
+    '${Uri.base.origin}/#$route',
+  );
+
+  await launchUrl(
+    url,
+    webOnlyWindowName: '_blank',
+  );
+}
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: bgColor,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: const Color.fromARGB(255, 240, 239, 239),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.25),
+            blurRadius: 10,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(
+          Container(
+            width: double.infinity,
+            height: 150,
+            alignment: Alignment.center,
             child: Container(
-              width: 150,
-              height: 50,
+              height: 120,
+              width: 120,
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage(image),
@@ -36,39 +63,43 @@ class ProjectCard extends StatelessWidget {
           ),
           Expanded(
             child: Container(
-              padding: EdgeInsets.all(10),
+              padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                    width: double.infinity,
                     child: Text(
                       title,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w800,
                       ),
                     ),
                   ),
-                  SizedBox(height: 20,),
-                  ProjectTags(tags),
-                  SizedBox(height: 20,),
-                  Container(
-                    height: 50,
-                    alignment: Alignment.center,
-                    child: FilledButton(
-                      onPressed: (){
-                    
-                    },
-                    style: FilledButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)
+                  SizedBox(height: 20),
+                  Expanded(child: ProjectTags(tags)),
+                  Expanded(
+                    child: Container(
+                      height: 10,
+                      padding: EdgeInsets.all(5),
+                      alignment: Alignment.bottomCenter,
+                      child: ElevatedButton(
+                        onPressed: () => openProject(route),
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          backgroundColor: buttonColor,
+                          foregroundColor: Colors.white
+                        ),
+                        child: Text(
+                          'View',
+                          style: TextStyle(color: Colors.black, fontSize: 12),
+                        ),
                       ),
-                      backgroundColor: Color.fromARGB(255, 57, 59, 59)
                     ),
-                    child: Text('View Project')),
-                  )
+                  ),
                 ],
               ),
             ),
