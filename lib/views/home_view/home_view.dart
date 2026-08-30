@@ -13,94 +13,83 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.25),
-            blurRadius: 10,
-            offset: const Offset(0, 0),
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: SizedBox(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: Name(),
+                    ),
+                  ),
+                  Expanded(
+                    child: ContainerBox(
+                      'Projects',
+                      'assets/project.webp',
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => ProjectView(),
+                        );
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: ContainerBox(
+                      'About Me',
+                      'assets/about_me.webp',
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AboutMeView(),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+      
+          Expanded(
+            child: SizedBox(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    child: ContainerBox(
+                      'Skills',
+                      'assets/skills.webp',
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => SkillsView(),
+                        );
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: ContainerBox(
+                      'Resume',
+                      'assets/resume.webp',
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => ResumeView(),
+                        );
+                      },
+                    ),
+                  ),
+                  Expanded(child: Contact()),
+                ],
+              ),
+            ),
           ),
         ],
-        ),
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: SizedBox(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Expanded(
-                      child: Container(
-                        alignment: Alignment.center,
-                        child: Name(),
-                      ),
-                    ),
-                    Expanded(
-                      child: ContainerBox(
-                        'Projects',
-                        'assets/project.webp',
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => ProjectView(),
-                          );
-                        },
-                      ),
-                    ),
-                    Expanded(
-                      child: ContainerBox(
-                        'About Me',
-                        'assets/about_me.webp',
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => AboutMeView(),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            Expanded(
-              child: SizedBox(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Expanded(
-                      child: ContainerBox(
-                        'Skills',
-                        'assets/skills.webp',
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => SkillsView(),
-                          );
-                        },
-                      ),
-                    ),
-                    Expanded(
-                      child: ContainerBox(
-                        'Resume',
-                        'assets/resume.webp',
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => ResumeView(),
-                          );
-                        },
-                      ),
-                    ),
-                    Expanded(child: Contact()),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

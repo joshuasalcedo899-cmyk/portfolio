@@ -10,7 +10,7 @@ class ProjectView extends StatelessWidget {
     return Dialog(
       backgroundColor: Colors.white,
       child: Container(
-        width: 1200,
+        width: 1000,
         padding: const EdgeInsets.all(30),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -35,7 +35,7 @@ class ProjectView extends StatelessWidget {
             const SizedBox(height: 20),
 
             SizedBox(
-              height: 400,
+              height: 350,
               child: GridView.builder(
                 padding: EdgeInsets.all(10),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

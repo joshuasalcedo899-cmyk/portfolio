@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_testing/widgets/contact/contact.dart';
 import 'package:flutter_testing/widgets/video_background/overlay_button.dart';
 
 class VideoBackground extends StatefulWidget {
