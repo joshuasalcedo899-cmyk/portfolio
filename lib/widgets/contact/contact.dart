@@ -22,7 +22,7 @@ class Contact extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            height: 150.0,
+            height: 80.0,
             alignment: Alignment.center,
             child: Text(
               'Contacts',
@@ -36,68 +36,58 @@ class Contact extends StatelessWidget {
           Container(
             height: 250.0,
             alignment: Alignment.center,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                Expanded(
-                  child: SizedBox(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TextButton(
-                            onPressed: () => _launchUrl('https://www.facebook.com/ajsalcedo0110/'),
-                            child: ContactText(
-                              'assets/contacts/facebook-logo.png',
-                            ),
-                          ),
-                          SizedBox(height: 50.0),
-                          ContactText(
-                            'assets/contacts/email.png',
-                          ),
-                          SizedBox(height: 50.0),
-                          ContactText(
-                            'assets/contacts/phone-call.png',
-                          ),
-                        ],
+            child: Expanded(
+              child: SizedBox(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextButton(
+                        onPressed: () => _launchUrl('https://www.facebook.com/ajsalcedo0110/'),
+                        child: ContactText(
+                          'Joshua Salcedo',
+                          'assets/contacts/facebook-logo.png',
+                        ),
+                      ),
+                      SizedBox(height: 10.0),
+                      ContactText(
+                        'joshuasalcedo899@gmail.com',
+                        'assets/contacts/email.png',
+                      ),
+                      SizedBox(height: 10.0),
+                      ContactText(
+                        '(+63)970 155 8776',
+                        'assets/contacts/phone-call.png',
+                      ),
+                      SizedBox(height: 10.0),
+                      TextButton(
+                      onPressed: () => _launchUrl(
+                        'https://github.com/joshuasalcedo899-cmyk',
+                      ),
+                      child: ContactText(
+                        '_|osh.dev',
+                        'assets/contacts/github.png',
                       ),
                     ),
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TextButton(
-                          onPressed: () => _launchUrl(
-                            'https://github.com/joshuasalcedo899-cmyk',
-                          ),
-                          child: ContactText(
-                            'assets/contacts/github.png',
-                          ),
-                        ),
-                        SizedBox(height: 50.0),
-                        TextButton(
-                          onPressed: () => _launchUrl('https://www.linkedin.com/in/joshua-salcedo-softdev/'),
-                          child: ContactText(
-                            'assets/contacts/linkedin.png',
-                          ),
-                        ),
-                        SizedBox(height: 50.0),
-                        ContactText(
-                          'assets/contacts/phone-call.png',
-                        ),
-                      ],
+                    SizedBox(height: 10.0),
+                    TextButton(
+                      onPressed: () => _launchUrl('https://www.linkedin.com/in/joshua-salcedo-softdev/'),
+                      child: ContactText(
+                        'joshua-salcedo-softdev',
+                        'assets/contacts/linkedin.png',
+                      ),
                     ),
+                    SizedBox(height: 10.0),
+                    ContactText(
+                      '(+63)970 155 8776',
+                      'assets/contacts/phone-call.png',
+                    ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
           ),
         ],

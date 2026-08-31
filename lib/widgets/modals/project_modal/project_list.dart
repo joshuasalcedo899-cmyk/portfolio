@@ -12,4 +12,16 @@ List<Map> projects = [
       'route': '/projects/mail-tracking',
       'tags': ['PHP', 'CSS', 'JavaScript', 'Node.js']
     },
+    {
+      'title': 'Automated Mail Tracker for Department of Human Settlement and Urban Development (DHSUD)',
+      'image': 'assets/DHSUD.png',
+      'route': '/projects/mail-tracking',
+      'tags': ['PHP', 'CSS', 'JavaScript', 'Node.js']
+    },
+    {
+      'title': 'Automated Mail Tracker for Department of Human Settlement and Urban Development (DHSUD)',
+      'image': 'assets/DHSUD.png',
+      'route': '/projects/mail-tracking',
+      'tags': ['PHP', 'CSS', 'JavaScript', 'Node.js']
+    },
   ];

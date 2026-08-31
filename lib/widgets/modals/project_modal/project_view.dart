@@ -9,6 +9,9 @@ class ProjectView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadiusGeometry.circular(0)
+      ),
       child: Container(
         width: 1000,
         padding: const EdgeInsets.all(30),

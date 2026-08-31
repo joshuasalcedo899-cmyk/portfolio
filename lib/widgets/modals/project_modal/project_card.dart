@@ -18,16 +18,20 @@ class ProjectCard extends StatelessWidget {
   });
 
   Future<void> openProject(String route) async {
-    final url = Uri.parse('${Uri.base.origin}/#$route');
+  final url = Uri.parse(
+    '${Uri.base.origin}/#$route',
+  );
 
-    await launchUrl(url, webOnlyWindowName: '_blank');
-  }
+  await launchUrl(
+    url,
+    webOnlyWindowName: '_blank',
+  );
+}
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
         color: const Color.fromARGB(255, 240, 239, 239),
         boxShadow: [
           BoxShadow(
@@ -42,11 +46,11 @@ class ProjectCard extends StatelessWidget {
         children: [
           Container(
             width: double.infinity,
-            height: 150,
+            height: 100,
             alignment: Alignment.center,
             child: Container(
-              height: 120,
-              width: 120,
+              height: 80,
+              width: 80,
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage(image),
@@ -66,7 +70,7 @@ class ProjectCard extends StatelessWidget {
                       title,
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 13,
+                        fontSize: 11,
                         fontWeight: FontWeight.w800,
                       ),
                     ),
@@ -75,7 +79,6 @@ class ProjectCard extends StatelessWidget {
                   Expanded(child: ProjectTags(tags)),
                   Expanded(
                     child: Container(
-                      height: 10,
                       padding: EdgeInsets.all(5),
                       alignment: Alignment.bottomCenter,
                       child: ElevatedButton(
@@ -85,11 +88,11 @@ class ProjectCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(5),
                           ),
                           backgroundColor: buttonColor,
-                          foregroundColor: Colors.white,
+                          foregroundColor: Colors.white
                         ),
                         child: Text(
                           'View',
-                          style: TextStyle(color: Colors.black, fontSize: 12),
+                          style: TextStyle(color: Colors.black, fontSize: 10),
                         ),
                       ),
                     ),
