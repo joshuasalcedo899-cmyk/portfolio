@@ -3,8 +3,11 @@
 class ProjectItem {
   final String id;
   final String title;
+  final String summary;
   final String description;
   final List<String> techStack;
+  final String projectType;
+  final String platform;
   final String? liveUrl;
   final String? githubUrl;
   final List<String> images;
@@ -12,8 +15,11 @@ class ProjectItem {
   const ProjectItem({
     required this.id,
     required this.title,
+    required this.summary,
     required this.description,
     required this.techStack,
+    required this.projectType,
+    required this.platform,
     this.liveUrl,
     this.githubUrl,
     this.images = const [],
@@ -23,15 +29,24 @@ class ProjectItem {
 const List<ProjectItem> myProjects = [
   ProjectItem(
     id: 'aria',
-    title: 'Local AI Assistant',
-    description: 'Android voice assistant using Piper TTS and local LLM endpoints.',
-    techStack: ['Flutter', 'Kotlin', 'REST API'],
-    githubUrl: 'https://github.com/username/project1',
+    title: 'ARIA (Augmented Reality Informative Assistant)',
+    summary: 'An augmented-reality assistant that brings information into the physical environment.',
+    description:
+        'ARIA is an interactive assistant project that combines augmented reality and AI-driven conversation to make information easier to explore in context.',
+    techStack: ['Unity', 'C#', 'Python', 'AI', 'AR', 'Chatbot'],
+    projectType: 'Augmented reality assistant',
+    platform: 'Mobile',
+    images: ['assets/ARIA.png', 'assets/ARIA_Body.png', ],
   ),
   ProjectItem(
     id: 'mail-tracking',
-    title: 'Custom Media Dashboard',
-    description: 'A dashboard client for home server media streams.',
-    techStack: ['Flutter Web', 'WebSockets'],
+    title: 'Automated Mail Tracker for DHSUD',
+    summary: 'A tracking system for managing departmental mail workflows and visibility.',
+    description:
+        'This project organizes mail-tracking workflows for the Department of Human Settlements and Urban Development, helping users follow the status of incoming and outgoing correspondence.',
+    techStack: ['PHP', 'CSS', 'JavaScript', 'Node.js'],
+    projectType: 'Workflow dashboard',
+    platform: 'Web',
+    images: ['assets/DHSUD.png'],
   ),
 ];
