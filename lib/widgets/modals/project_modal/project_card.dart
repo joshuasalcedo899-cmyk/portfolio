@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_testing/constants/app_colors.dart';
 import 'package:flutter_testing/widgets/modals/project_modal/project_tags.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProjectCard extends StatelessWidget {
@@ -16,17 +17,6 @@ class ProjectCard extends StatelessWidget {
     required this.route,
     required this.tags,
   });
-
-  Future<void> openProject(String route) async {
-  final url = Uri.parse(
-    '${Uri.base.origin}/#$route',
-  );
-
-  await launchUrl(
-    url,
-    webOnlyWindowName: '_blank',
-  );
-}
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +72,7 @@ class ProjectCard extends StatelessWidget {
                       padding: EdgeInsets.all(5),
                       alignment: Alignment.bottomCenter,
                       child: ElevatedButton(
-                        onPressed: () => openProject(route),
+                        onPressed: () => context.go(route),
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5),

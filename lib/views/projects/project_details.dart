@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_testing/views/projects/image_view.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_testing/views/projects/project_item_list.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -9,38 +10,34 @@ class ProjectDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF6F6F6),
-      body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final isCompact = constraints.maxWidth < 720;
+    return Container(
+      color: const Color(0xFFF6F6F6),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isCompact = constraints.maxWidth < 720;
 
-            return ListView(
-              padding: EdgeInsets.symmetric(
-                horizontal: isCompact ? 20 : 48,
-                vertical: isCompact ? 20 : 32,
-              ),
-              children: [
-                Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 1100),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _ProjectHeader(project: project),
-                        const SizedBox(height: 32),
-                        _ProjectGallery(project: project),
-                        const SizedBox(height: 40),
-                        _ProjectContent(project: project, isCompact: isCompact),
-                      ],
-                    ),
-                  ),
+          return Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: isCompact ? 20 : 48,
+              vertical: isCompact ? 20 : 32,
+            ),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 1100),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _ProjectHeader(project: project),
+                    const SizedBox(height: 32),
+                    _ProjectGallery(project: project),
+                    const SizedBox(height: 40),
+                    _ProjectContent(project: project, isCompact: isCompact),
+                  ],
                 ),
-              ],
-            );
-          },
-        ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -94,9 +91,9 @@ class _ProjectHeader extends StatelessWidget {
         const SizedBox(height: 10),
         Text(
           project.summary,
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            color: const Color(0xFF5A5A5A),
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium?.copyWith(color: const Color(0xFF5A5A5A)),
         ),
         const SizedBox(height: 18),
         Wrap(
@@ -118,93 +115,240 @@ class _ProjectHeader extends StatelessWidget {
   }
 }
 
-class _ProjectGallery extends StatelessWidget {
+class _ProjectGallery extends StatefulWidget {
   final ProjectItem project;
 
   const _ProjectGallery({required this.project});
 
   @override
+  State<_ProjectGallery> createState() => _ProjectGalleryState();
+}
+
+class _ProjectGalleryState extends State<_ProjectGallery> {
+  var _selectedIndex = 0;
+
+  void _selectImage(int index) {
+    setState(() => _selectedIndex = index);
+  }
+
+  void _selectNextImage() {
+    _selectImage((_selectedIndex + 1) % widget.project.images.length);
+  }
+
+  void _selectPreviousImage() {
+    _selectImage(
+      (_selectedIndex - 1 + widget.project.images.length) %
+          widget.project.images.length,
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (project.images.isEmpty) {
+    if (widget.project.images.isEmpty) {
       return const _ImagePlaceholder();
     }
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final showSupportingImages =
-            constraints.maxWidth >= 720 && project.images.length > 1;
+        final isCompact = constraints.maxWidth < 720;
+        final previewCount = widget.project.images.length > 2
+            ? 2
+            : widget.project.images.length - 1;
 
-        if (!showSupportingImages) {
-          return _GalleryImage(
-            imagePath: project.images.first,
-            aspectRatio: 16 / 9,
+        if (previewCount == 0 || isCompact) {
+          return Stack(
+            children: [
+              AspectRatio(
+                aspectRatio: 16 / 9,
+                child: _GalleryImageTile(
+                  imagePath: widget.project.images[_selectedIndex],
+                ),
+              ),
+              if (previewCount > 0) ...[
+                Positioned(
+                  top: 0,
+                  bottom: 0,
+                  left: 8,
+                  child: _GalleryNavigationButton(
+                    tooltip: 'Previous image',
+                    icon: Icons.chevron_left,
+                    onPressed: _selectPreviousImage,
+                  ),
+                ),
+                Positioned(
+                  top: 0,
+                  bottom: 0,
+                  right: 8,
+                  child: _GalleryNavigationButton(
+                    tooltip: 'Next image',
+                    icon: Icons.chevron_right,
+                    onPressed: _selectNextImage,
+                  ),
+                ),
+              ],
+            ],
           );
         }
 
-        final supportingImages = project.images.skip(1).take(2).toList();
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              flex: 2,
-              child: _GalleryImage(
-                imagePath: project.images.first,
-                aspectRatio: 1,
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: _GalleryImage(imagePath: supportingImages.first),
+        const spacing = 12.0;
+        const navigationSpace = 40.0;
+
+        final galleryHeight = constraints.maxWidth * 0.35;
+
+        return SizedBox(
+          height: galleryHeight,
+          child: Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: navigationSpace,
+                ),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      // Main / selected image
+                      SizedBox(
+                        height: galleryHeight,
+                        child: _GalleryImageTile(
+                          imagePath: widget.project.images[_selectedIndex],
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => ImageView(
+                                imagePath:
+                                    widget.project.images[_selectedIndex],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+
+                      // Preview images
+                      for (
+                        var offset = 1;
+                        offset < widget.project.images.length;
+                        offset++
+                      ) ...[
+                        const SizedBox(width: spacing),
+
+                        SizedBox(
+                          height: galleryHeight,
+                          child: _GalleryImageTile(
+                            imagePath:
+                                widget.project.images[(_selectedIndex +
+                                        offset) %
+                                    widget.project.images.length],
+                            onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => ImageView(
+                                imagePath:
+                                    widget.project.images[(_selectedIndex +
+                                        offset) %
+                                    widget.project.images.length]
+                              ),
+                            );
+                          },
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
-                  if (supportingImages.length > 1) ...[
-                    const SizedBox(height: 16),
-                    Expanded(
-                      child: _GalleryImage(imagePath: supportingImages[1]),
-                    ),
-                  ],
-                ],
+                ),
               ),
-            ),
-          ],
+
+              // Previous button
+              Positioned(
+                top: 0,
+                bottom: 0,
+                left: 0,
+                child: _GalleryNavigationButton(
+                  tooltip: 'Previous image',
+                  icon: Icons.chevron_left,
+                  onPressed: _selectPreviousImage,
+                ),
+              ),
+
+              // Next button
+              Positioned(
+                top: 0,
+                bottom: 0,
+                right: 0,
+                child: _GalleryNavigationButton(
+                  tooltip: 'Next image',
+                  icon: Icons.chevron_right,
+                  onPressed: _selectNextImage,
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
   }
 }
 
-class _GalleryImage extends StatelessWidget {
+class _GalleryImageTile extends StatelessWidget {
   final String imagePath;
-  final double? aspectRatio;
+  final VoidCallback? onTap;
 
-  const _GalleryImage({required this.imagePath, this.aspectRatio});
+  const _GalleryImageTile({required this.imagePath, this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    final image = Container(
-      width: double.infinity,
-      height: double.infinity,
+    return DecoratedBox(
       decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: const Color(0xFFD6D6D6)),
+        color: const Color(0xFFE8EFFB),
+        borderRadius: BorderRadius.circular(6),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Image.asset(
-          imagePath,
-          fit: BoxFit.contain,
-          errorBuilder: (context, error, stackTrace) => const _ImagePlaceholder(),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(6),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: onTap,
+            child: Image.asset(
+              imagePath,
+              fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) {
+                return const Center(
+                  child: Icon(Icons.photo_library_outlined, size: 44),
+                );
+              },
+            ),
+          ),
         ),
       ),
     );
+  }
+}
 
-    if (aspectRatio == null) {
-      return image;
-    }
+class _GalleryNavigationButton extends StatelessWidget {
+  final String tooltip;
+  final IconData icon;
+  final VoidCallback onPressed;
 
-    return AspectRatio(aspectRatio: aspectRatio!, child: image);
+  const _GalleryNavigationButton({
+    required this.tooltip,
+    required this.icon,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Material(
+        color: Colors.white,
+        elevation: 3,
+        shape: const CircleBorder(),
+        child: IconButton(
+          tooltip: tooltip,
+          onPressed: onPressed,
+          icon: Icon(icon, color: const Color(0xFF5A5A5A)),
+        ),
+      ),
+    );
   }
 }
 

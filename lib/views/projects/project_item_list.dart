@@ -36,7 +36,9 @@ const List<ProjectItem> myProjects = [
     techStack: ['Unity', 'C#', 'Python', 'AI', 'AR', 'Chatbot'],
     projectType: 'Augmented reality assistant',
     platform: 'Mobile',
-    images: ['assets/ARIA.png', 'assets/ARIA_Body.png', ],
+    images: ['assets/ARIA.png', 'assets/ARIA_Body.jpg', 'assets/ARIA_Body.jpg', 'assets/ARIA_Body.jpg'],
+    liveUrl: 'https://joshuasalcedo899-cmyk.github.io/blog',
+    githubUrl: 'https://github.com/joshuasalcedo899-cmyk/ARIA'
   ),
   ProjectItem(
     id: 'mail-tracking',

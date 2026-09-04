@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_testing/views/projects/project_details.dart';
 import 'package:flutter_testing/views/projects/project_item_list.dart';
 import 'package:flutter_testing/widgets/centered_view/centered_view.dart';
@@ -10,23 +11,25 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state, child) {
         return CenteredView(child: child);
       },
-      routes: [
-        GoRoute(path: '/', builder: (context, state) => const HomeView()),
-        GoRoute(
-          path: '/projects/:id',
-          builder: (context, state) {
-            // Extract the :id parameter from the URL
-            final projectId = state.pathParameters['id'];
+      routes: [GoRoute(path: '/', builder: (context, state) => const HomeView())],
+    ),
+    GoRoute(
+      path: '/projects/:id',
+      builder: (context, state) {
+        final projectId = state.pathParameters['id'];
+        final project = myProjects.firstWhere(
+          (item) => item.id == projectId,
+        );
 
-            // Find the matching project item
-            final project = myProjects.firstWhere(
-              (item) => item.id == projectId,
-            );
-
-            return ProjectDetailPage(project: project);
-          },
-        ),
-      ],
+        return Scaffold(
+          backgroundColor: const Color(0xFFF6F6F6),
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: CenteredView(child: ProjectDetailPage(project: project)),
+            ),
+          ),
+        );
+      },
     ),
   ],
 );
