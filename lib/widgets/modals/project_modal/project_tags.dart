@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_testing/constants/app_colors.dart';
 
 class ProjectTags extends StatelessWidget {
   final List<String> tags;
@@ -10,22 +11,20 @@ class ProjectTags extends StatelessWidget {
       spacing: 6,
       runSpacing: 6,
       children: tags.map((tag) {
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        return DecoratedBox(
           decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.10),
-                blurRadius: 10,
-                offset: const Offset(0, 5),
-              ),
-            ],
-            color: const Color.fromARGB(83, 156, 153, 153),
-            borderRadius: BorderRadius.circular(5),
+            color: AppColors.fill(context),
+            borderRadius: BorderRadius.circular(8),
           ),
-          child: Text(
-            tag,
-            style: const TextStyle(color: Colors.black, fontSize: 10),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            child: Text(
+              tag,
+              style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                color: AppColors.label(context),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
         );
       }).toList(),

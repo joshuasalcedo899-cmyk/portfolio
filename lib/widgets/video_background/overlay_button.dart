@@ -2,32 +2,79 @@ import 'package:flutter/material.dart';
 
 class OverlayButton extends StatelessWidget {
   final String title;
-  final VoidCallback onTap;
-  const OverlayButton(this.title, {super.key, required this.onTap});
+  final bool isHighlighted;
+  final Color foregroundColor;
+  final Color accentColor;
+
+  const OverlayButton(
+    this.title, {
+    super.key,
+    this.isHighlighted = false,
+    this.foregroundColor = Colors.white,
+    this.accentColor = Colors.white,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        color: Colors.black.withValues(alpha: 0.2),
-        alignment: Alignment.center,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 40,
-                fontWeight: FontWeight.bold,
+    final textTheme = Theme.of(context).textTheme;
+
+    return Padding(
+      padding: const EdgeInsets.all(24),
+      child: Align(
+        alignment: Alignment.bottomLeft,
+        child: AnimatedScale(
+          duration: const Duration(milliseconds: 180),
+          scale: isHighlighted ? 1.02 : 1,
+          alignment: Alignment.bottomLeft,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: textTheme.headlineMedium?.copyWith(
+                  color: foregroundColor,
+                  fontWeight: FontWeight.w800,
+                  height: 1.05,
+                ),
               ),
-            ),
-            Text(
-              '-- Click to navigate --',
-              style: const TextStyle(color: Colors.white, fontSize: 20),
-            ),
-          ],
+              const SizedBox(height: 10),
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  color: accentColor.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: accentColor.withValues(alpha: 0.22),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Open',
+                        style: TextStyle(
+                          color: accentColor,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Icon(
+                        Icons.arrow_forward_rounded,
+                        color: accentColor,
+                        size: 18,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

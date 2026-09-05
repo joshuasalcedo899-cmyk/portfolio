@@ -18,7 +18,7 @@ void main() {
 
     expect(find.text(myProjects.first.title), findsOneWidget);
     expect(find.text('Overview'), findsOneWidget);
-    expect(find.text('Project facts'), findsOneWidget);
-    expect(find.byType(Image), findsOneWidget);
+    expect(find.text('Project Facts'), findsOneWidget);
+    expect(find.byType(Image), findsWidgets);
   });
 }

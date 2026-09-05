@@ -22,7 +22,10 @@ class ContactText extends StatelessWidget {
           child: Text(
             details,
             softWrap: true,
-            style: const TextStyle(color: Colors.white),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
       ],

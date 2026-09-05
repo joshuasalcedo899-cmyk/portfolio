@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_testing/constants/app_colors.dart';
 
 class ImageView extends StatelessWidget {
   final String imagePath;
@@ -7,9 +8,17 @@ class ImageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      child: Container(
-        color: Colors.white,
-        child: Image.asset(imagePath, fit: BoxFit.contain)),
+      insetPadding: const EdgeInsets.all(20),
+      backgroundColor: AppColors.background(context),
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: 1000,
+          maxHeight: MediaQuery.sizeOf(context).height - 40,
+        ),
+        child: Image.asset(imagePath, fit: BoxFit.contain),
+      ),
     );
   }
 }

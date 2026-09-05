@@ -17,7 +17,7 @@ class Contact extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      color: Color(0xFF5A1414),
+      color: const Color(0xFF1D1D1F),
       child: LayoutBuilder(
         builder: (context, constraints) {
           final isCompact =
@@ -29,12 +29,13 @@ class Contact extends StatelessWidget {
           return Column(
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(vertical: isCompact ? 12.0 : 18.0),
+                padding: EdgeInsets.symmetric(
+                  vertical: isCompact ? 12.0 : 18.0,
+                ),
                 child: Text(
                   'Contacts',
-                  style: TextStyle(
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     color: Colors.white,
-                    fontSize: isCompact ? 20.0 : 24.0,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -110,8 +111,8 @@ class Contact extends StatelessWidget {
 
   static final _contactButtonStyle = TextButton.styleFrom(
     alignment: Alignment.centerLeft,
-    minimumSize: Size.zero,
+    minimumSize: const Size(44, 44),
     padding: EdgeInsets.zero,
-    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+    tapTargetSize: MaterialTapTargetSize.padded,
   );
 }

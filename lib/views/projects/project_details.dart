@@ -1,36 +1,39 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_testing/constants/app_colors.dart';
 import 'package:flutter_testing/views/projects/image_view.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_testing/views/projects/project_item_list.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProjectDetailPage extends StatelessWidget {
   final ProjectItem project;
+
   const ProjectDetailPage({super.key, required this.project});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: const Color(0xFFF6F6F6),
+    return Material(
+      color: AppColors.groupedBackground(context),
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final isCompact = constraints.maxWidth < 720;
+          final isCompact = constraints.maxWidth < 760;
 
-          return Padding(
+          return SingleChildScrollView(
             padding: EdgeInsets.symmetric(
-              horizontal: isCompact ? 20 : 48,
-              vertical: isCompact ? 20 : 32,
+              horizontal: isCompact ? 16 : 48,
+              vertical: isCompact ? 16 : 36,
             ),
             child: Center(
               child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 1100),
+                constraints: const BoxConstraints(maxWidth: 1080),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _ProjectHeader(project: project),
-                    const SizedBox(height: 32),
+                    _ProjectHeader(project: project, isCompact: isCompact),
+                    const SizedBox(height: 28),
                     _ProjectGallery(project: project),
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 28),
                     _ProjectContent(project: project, isCompact: isCompact),
                   ],
                 ),
@@ -45,8 +48,9 @@ class ProjectDetailPage extends StatelessWidget {
 
 class _ProjectHeader extends StatelessWidget {
   final ProjectItem project;
+  final bool isCompact;
 
-  const _ProjectHeader({required this.project});
+  const _ProjectHeader({required this.project, required this.isCompact});
 
   Future<void> _launchUrl(String urlString) async {
     final url = Uri.parse(urlString);
@@ -55,62 +59,133 @@ class _ProjectHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
-            IconButton(
+            _CircleIconButton(
               tooltip: 'Back to home',
+              icon: CupertinoIcons.chevron_back,
               onPressed: () => context.go('/'),
-              icon: const Icon(Icons.arrow_back),
             ),
             const Spacer(),
             if (project.githubUrl != null)
-              IconButton(
+              _CircleIconButton(
                 tooltip: 'Open source code',
+                icon: CupertinoIcons.chevron_left_slash_chevron_right,
                 onPressed: () => _launchUrl(project.githubUrl!),
-                icon: const Icon(Icons.code),
               ),
-            if (project.liveUrl != null)
-              IconButton(
+            if (project.liveUrl != null) ...[
+              const SizedBox(width: 8),
+              _CircleIconButton(
                 tooltip: 'Open live project',
+                icon: CupertinoIcons.arrow_up_right,
                 onPressed: () => _launchUrl(project.liveUrl!),
-                icon: const Icon(Icons.open_in_new),
               ),
+            ],
           ],
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 30),
         Text(
-          project.title,
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-            color: const Color(0xFF151515),
-            fontWeight: FontWeight.w800,
+          project.projectType,
+          style: textTheme.labelLarge?.copyWith(
+            color: AppColors.accent,
+            fontWeight: FontWeight.w700,
           ),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 8),
         Text(
-          project.summary,
-          style: Theme.of(
-            context,
-          ).textTheme.titleMedium?.copyWith(color: const Color(0xFF5A5A5A)),
+          project.title,
+          style: (isCompact ? textTheme.headlineMedium : textTheme.displaySmall)
+              ?.copyWith(
+                color: AppColors.label(context),
+                fontWeight: FontWeight.w800,
+                height: 1.04,
+              ),
         ),
-        const SizedBox(height: 18),
+        const SizedBox(height: 12),
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 760),
+          child: Text(
+            project.summary,
+            style: textTheme.titleMedium?.copyWith(
+              color: AppColors.secondaryLabel(context),
+              height: 1.45,
+            ),
+          ),
+        ),
+        const SizedBox(height: 20),
         Wrap(
           spacing: 8,
           runSpacing: 8,
           children: project.techStack
-              .map(
-                (tech) => Chip(
-                  label: Text(tech),
-                  side: const BorderSide(color: Color(0xFFD6D6D6)),
-                  backgroundColor: Colors.white,
-                  visualDensity: VisualDensity.compact,
-                ),
-              )
+              .map((tech) => _TechnologyPill(label: tech))
               .toList(),
         ),
       ],
+    );
+  }
+}
+
+class _CircleIconButton extends StatelessWidget {
+  final String tooltip;
+  final IconData icon;
+  final VoidCallback onPressed;
+
+  const _CircleIconButton({
+    required this.tooltip,
+    required this.icon,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: tooltip,
+      child: Material(
+        color: AppColors.secondaryGroupedBackground(context),
+        shape: const CircleBorder(),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          customBorder: const CircleBorder(),
+          onTap: onPressed,
+          child: SizedBox(
+            width: 44,
+            height: 44,
+            child: Icon(icon, color: AppColors.label(context), size: 22),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _TechnologyPill extends StatelessWidget {
+  final String label;
+
+  const _TechnologyPill({required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: AppColors.secondaryGroupedBackground(context),
+        border: Border.all(color: AppColors.separator(context)),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        child: Text(
+          label,
+          style: Theme.of(context).textTheme.labelLarge?.copyWith(
+            color: AppColors.label(context),
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
     );
   }
 }
@@ -142,6 +217,14 @@ class _ProjectGalleryState extends State<_ProjectGallery> {
     );
   }
 
+  void _openSelectedImage() {
+    showDialog(
+      context: context,
+      builder: (context) =>
+          ImageView(imagePath: widget.project.images[_selectedIndex]),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.project.images.isEmpty) {
@@ -151,138 +234,76 @@ class _ProjectGalleryState extends State<_ProjectGallery> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final isCompact = constraints.maxWidth < 720;
-        final previewCount = widget.project.images.length > 2
-            ? 2
-            : widget.project.images.length - 1;
+        final hasMultipleImages = widget.project.images.length > 1;
 
-        if (previewCount == 0 || isCompact) {
-          return Stack(
-            children: [
-              AspectRatio(
-                aspectRatio: 16 / 9,
-                child: _GalleryImageTile(
-                  imagePath: widget.project.images[_selectedIndex],
-                ),
-              ),
-              if (previewCount > 0) ...[
-                Positioned(
-                  top: 0,
-                  bottom: 0,
-                  left: 8,
-                  child: _GalleryNavigationButton(
-                    tooltip: 'Previous image',
-                    icon: Icons.chevron_left,
-                    onPressed: _selectPreviousImage,
-                  ),
-                ),
-                Positioned(
-                  top: 0,
-                  bottom: 0,
-                  right: 8,
-                  child: _GalleryNavigationButton(
-                    tooltip: 'Next image',
-                    icon: Icons.chevron_right,
-                    onPressed: _selectNextImage,
-                  ),
-                ),
-              ],
-            ],
-          );
-        }
-
-        const spacing = 12.0;
-        const navigationSpace = 40.0;
-
-        final galleryHeight = constraints.maxWidth * 0.35;
-
-        return SizedBox(
-          height: galleryHeight,
-          child: Stack(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: navigationSpace,
-                ),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Gallery', style: Theme.of(context).textTheme.titleLarge),
+            const SizedBox(height: 12),
+            Material(
+              color: AppColors.secondaryGroupedBackground(context),
+              borderRadius: BorderRadius.circular(8),
+              clipBehavior: Clip.antiAlias,
+              child: Column(
+                children: [
+                  Stack(
                     children: [
-                      // Main / selected image
-                      SizedBox(
-                        height: galleryHeight,
+                      AspectRatio(
+                        aspectRatio: isCompact ? 4 / 3 : 16 / 9,
                         child: _GalleryImageTile(
                           imagePath: widget.project.images[_selectedIndex],
-                          onTap: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => ImageView(
-                                imagePath:
-                                    widget.project.images[_selectedIndex],
-                              ),
-                            );
-                          },
+                          onTap: _openSelectedImage,
                         ),
                       ),
-
-                      // Preview images
-                      for (
-                        var offset = 1;
-                        offset < widget.project.images.length;
-                        offset++
-                      ) ...[
-                        const SizedBox(width: spacing),
-
-                        SizedBox(
-                          height: galleryHeight,
-                          child: _GalleryImageTile(
-                            imagePath:
-                                widget.project.images[(_selectedIndex +
-                                        offset) %
-                                    widget.project.images.length],
-                            onTap: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) => ImageView(
-                                imagePath:
-                                    widget.project.images[(_selectedIndex +
-                                        offset) %
-                                    widget.project.images.length]
+                      if (hasMultipleImages) ...[
+                        Positioned.fill(
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: _GalleryNavigationButton(
+                                tooltip: 'Previous image',
+                                icon: CupertinoIcons.chevron_left,
+                                onPressed: _selectPreviousImage,
                               ),
-                            );
-                          },
+                            ),
+                          ),
+                        ),
+                        Positioned.fill(
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: _GalleryNavigationButton(
+                                tooltip: 'Next image',
+                                icon: CupertinoIcons.chevron_right,
+                                onPressed: _selectNextImage,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          right: 14,
+                          bottom: 14,
+                          child: _ImageCountPill(
+                            current: _selectedIndex + 1,
+                            total: widget.project.images.length,
                           ),
                         ),
                       ],
                     ],
                   ),
-                ),
+                  if (hasMultipleImages)
+                    _ThumbnailStrip(
+                      images: widget.project.images,
+                      selectedIndex: _selectedIndex,
+                      onSelected: _selectImage,
+                    ),
+                ],
               ),
-
-              // Previous button
-              Positioned(
-                top: 0,
-                bottom: 0,
-                left: 0,
-                child: _GalleryNavigationButton(
-                  tooltip: 'Previous image',
-                  icon: Icons.chevron_left,
-                  onPressed: _selectPreviousImage,
-                ),
-              ),
-
-              // Next button
-              Positioned(
-                top: 0,
-                bottom: 0,
-                right: 0,
-                child: _GalleryNavigationButton(
-                  tooltip: 'Next image',
-                  icon: Icons.chevron_right,
-                  onPressed: _selectNextImage,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );
@@ -297,28 +318,89 @@ class _GalleryImageTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: const Color(0xFFE8EFFB),
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(6),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: onTap,
-            child: Image.asset(
-              imagePath,
-              fit: BoxFit.contain,
-              errorBuilder: (context, error, stackTrace) {
-                return const Center(
-                  child: Icon(Icons.photo_library_outlined, size: 44),
-                );
-              },
-            ),
+    return Material(
+      color: AppColors.background(context),
+      child: InkWell(
+        onTap: onTap,
+        child: Ink(
+          decoration: BoxDecoration(
+            color: AppColors.background(context),
+            border: Border.all(color: AppColors.separator(context)),
+          ),
+          child: Image.asset(
+            imagePath,
+            fit: BoxFit.contain,
+            errorBuilder: (context, error, stackTrace) {
+              return Center(
+                child: Icon(
+                  CupertinoIcons.photo,
+                  size: 44,
+                  color: AppColors.secondaryLabel(context),
+                ),
+              );
+            },
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _ThumbnailStrip extends StatelessWidget {
+  final List<String> images;
+  final int selectedIndex;
+  final ValueChanged<int> onSelected;
+
+  const _ThumbnailStrip({
+    required this.images,
+    required this.selectedIndex,
+    required this.onSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 96,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.all(12),
+        itemCount: images.length,
+        separatorBuilder: (context, index) => const SizedBox(width: 10),
+        itemBuilder: (context, index) {
+          final isSelected = index == selectedIndex;
+
+          return Semantics(
+            button: true,
+            selected: isSelected,
+            label: 'Select image ${index + 1}',
+            child: Material(
+              color: AppColors.background(context),
+              borderRadius: BorderRadius.circular(8),
+              clipBehavior: Clip.antiAlias,
+              child: InkWell(
+                onTap: () => onSelected(index),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 160),
+                  width: 112,
+                  padding: const EdgeInsets.all(3),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: isSelected
+                          ? AppColors.accent
+                          : AppColors.separator(context),
+                      width: isSelected ? 2 : 1,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(6),
+                    child: Image.asset(images[index], fit: BoxFit.cover),
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -337,15 +419,47 @@ class _GalleryNavigationButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return Tooltip(
+      message: tooltip,
       child: Material(
-        color: Colors.white,
-        elevation: 3,
+        color: AppColors.background(context).withValues(alpha: 0.86),
         shape: const CircleBorder(),
-        child: IconButton(
-          tooltip: tooltip,
-          onPressed: onPressed,
-          icon: Icon(icon, color: const Color(0xFF5A5A5A)),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          customBorder: const CircleBorder(),
+          onTap: onPressed,
+          child: SizedBox(
+            width: 44,
+            height: 44,
+            child: Icon(icon, color: AppColors.label(context), size: 24),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ImageCountPill extends StatelessWidget {
+  final int current;
+  final int total;
+
+  const _ImageCountPill({required this.current, required this.total});
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: AppColors.background(context).withValues(alpha: 0.86),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        child: Text(
+          '$current of $total',
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+            color: AppColors.label(context),
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
     );
@@ -357,14 +471,18 @@ class _ImagePlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 280,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: const Color(0xFFD6D6D6)),
+    return _SectionSurface(
+      title: 'Gallery',
+      child: SizedBox(
+        height: 260,
+        child: Center(
+          child: Icon(
+            CupertinoIcons.photo,
+            size: 44,
+            color: AppColors.secondaryLabel(context),
+          ),
+        ),
       ),
-      child: const Icon(Icons.photo_library_outlined, size: 44),
     );
   }
 }
@@ -377,16 +495,15 @@ class _ProjectContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final overview = Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Overview', style: Theme.of(context).textTheme.titleLarge),
-        const SizedBox(height: 12),
-        Text(
-          project.description,
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(height: 1.6),
+    final overview = _SectionSurface(
+      title: 'Overview',
+      child: Text(
+        project.description,
+        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+          color: AppColors.label(context),
+          height: 1.55,
         ),
-      ],
+      ),
     );
 
     final facts = _ProjectFacts(project: project);
@@ -394,7 +511,7 @@ class _ProjectContent extends StatelessWidget {
     if (isCompact) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [overview, const SizedBox(height: 28), facts],
+        children: [overview, const SizedBox(height: 16), facts],
       );
     }
 
@@ -402,9 +519,43 @@ class _ProjectContent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(flex: 2, child: overview),
-        const SizedBox(width: 56),
+        const SizedBox(width: 18),
         Expanded(child: facts),
       ],
+    );
+  }
+}
+
+class _SectionSurface extends StatelessWidget {
+  final String title;
+  final Widget child;
+
+  const _SectionSurface({required this.title, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: AppColors.secondaryGroupedBackground(context),
+        border: Border.all(color: AppColors.separator(context)),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              color: AppColors.label(context),
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 14),
+          child,
+        ],
+      ),
     );
   }
 }
@@ -416,26 +567,27 @@ class _ProjectFacts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: const Color(0xFFD6D6D6)),
-      ),
+    return _SectionSurface(
+      title: 'Project Facts',
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Project facts', style: Theme.of(context).textTheme.titleMedium),
-          const SizedBox(height: 16),
           _FactRow(label: 'Type', value: project.projectType),
-          const SizedBox(height: 12),
+          const _FactDivider(),
           _FactRow(label: 'Platform', value: project.platform),
-          const SizedBox(height: 12),
+          const _FactDivider(),
           _FactRow(label: 'Stack', value: project.techStack.join(', ')),
         ],
       ),
     );
+  }
+}
+
+class _FactDivider extends StatelessWidget {
+  const _FactDivider();
+
+  @override
+  Widget build(BuildContext context) {
+    return Divider(height: 22, color: AppColors.separator(context));
   }
 }
 
@@ -447,18 +599,27 @@ class _FactRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label.toUpperCase(),
-          style: Theme.of(context).textTheme.labelSmall?.copyWith(
-            color: const Color(0xFF6D6D6D),
-            fontWeight: FontWeight.w700,
+        SizedBox(
+          width: 92,
+          child: Text(
+            label,
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+              color: AppColors.secondaryLabel(context),
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
-        const SizedBox(height: 3),
-        Text(value, style: Theme.of(context).textTheme.bodyMedium),
+        Expanded(
+          child: Text(
+            value,
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: AppColors.label(context)),
+          ),
+        ),
       ],
     );
   }

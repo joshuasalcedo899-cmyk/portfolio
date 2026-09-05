@@ -1,4 +1,8 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
+import 'package:flutter_testing/constants/app_colors.dart';
+import 'package:flutter_testing/widgets/modals/apple_dialog_scaffold.dart';
 import 'package:flutter_testing/widgets/modals/project_modal/project_card.dart';
 import 'package:flutter_testing/widgets/modals/project_modal/project_list.dart';
 
@@ -7,45 +11,35 @@ class ProjectView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      backgroundColor: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadiusGeometry.circular(0)
-      ),
-      child: Container(
-        width: 1000,
-        padding: const EdgeInsets.all(30),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Projects',
-                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-                ),
+    return AppleDialogScaffold(
+      title: 'Projects',
+      maxWidth: 1020,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final width = constraints.maxWidth;
+          final columns = width < 520
+              ? 1
+              : width < 760
+              ? 2
+              : width < 980
+              ? 3
+              : 4;
 
-                IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
+          return DecoratedBox(
+            decoration: BoxDecoration(
+              color: AppColors.groupedBackground(context),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: AppColors.separator(context)),
             ),
-
-            const SizedBox(height: 20),
-
-            SizedBox(
-              height: 350,
+            child: SizedBox(
+              height: math.min(MediaQuery.sizeOf(context).height * 0.62, 540),
               child: GridView.builder(
-                padding: EdgeInsets.all(10),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 4,
-                  crossAxisSpacing: 20,
-                  mainAxisSpacing: 20,
-                  childAspectRatio: 0.7,
+                padding: const EdgeInsets.all(12),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: columns,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                  childAspectRatio: 0.72,
                 ),
                 itemCount: projects.length,
                 itemBuilder: (context, index) {
@@ -60,8 +54,8 @@ class ProjectView extends StatelessWidget {
                 },
               ),
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

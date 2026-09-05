@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_testing/constants/app_colors.dart';
 import 'package:flutter_testing/widgets/modals/project_modal/project_tags.dart';
 import 'package:go_router/go_router.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ProjectCard extends StatelessWidget {
   final String title;
@@ -20,78 +19,73 @@ class ProjectCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 240, 239, 239),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.25),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: double.infinity,
-            height: 100,
-            alignment: Alignment.center,
-            child: Container(
-              height: 80,
-              width: 80,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(image),
-                  fit: BoxFit.fill,
+    return Semantics(
+      button: true,
+      label: 'View $title',
+      child: Material(
+        color: AppColors.tertiaryGroupedBackground(context),
+        borderRadius: BorderRadius.circular(8),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: () {
+            final router = GoRouter.of(context);
+            Navigator.pop(context);
+            router.go(route);
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 4,
+                  child: Center(
+                    child: Image.asset(
+                      image,
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Icon(
+                          Icons.apps_rounded,
+                          size: 44,
+                          color: AppColors.secondaryLabel(context),
+                        );
+                      },
+                    ),
+                  ),
                 ),
-              ),
+                const SizedBox(height: 12),
+                Text(
+                  title,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: AppColors.label(context),
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Expanded(flex: 2, child: ProjectTags(tags)),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    Text(
+                      'View project',
+                      style: Theme.of(
+                        context,
+                      ).textTheme.labelLarge?.copyWith(color: AppColors.accent),
+                    ),
+                    const SizedBox(width: 4),
+                    const Icon(
+                      Icons.arrow_forward_rounded,
+                      color: AppColors.accent,
+                      size: 18,
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    child: Text(
-                      title,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 11,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  Expanded(child: ProjectTags(tags)),
-                  Expanded(
-                    child: Container(
-                      padding: EdgeInsets.all(5),
-                      alignment: Alignment.bottomCenter,
-                      child: ElevatedButton(
-                        onPressed: () => context.go(route),
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          backgroundColor: buttonColor,
-                          foregroundColor: Colors.white
-                        ),
-                        child: Text(
-                          'View',
-                          style: TextStyle(color: Colors.black, fontSize: 10),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

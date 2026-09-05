@@ -1,5 +1,3 @@
-
-
 class ProjectItem {
   final String id;
   final String title;
@@ -30,20 +28,28 @@ const List<ProjectItem> myProjects = [
   ProjectItem(
     id: 'aria',
     title: 'ARIA (Augmented Reality Informative Assistant)',
-    summary: 'An augmented-reality assistant that brings information into the physical environment.',
+    summary:
+        'An augmented-reality assistant that brings information into the physical environment.',
     description:
         'ARIA is an interactive assistant project that combines augmented reality and AI-driven conversation to make information easier to explore in context.',
     techStack: ['Unity', 'C#', 'Python', 'AI', 'AR', 'Chatbot'],
     projectType: 'Augmented reality assistant',
     platform: 'Mobile',
-    images: ['assets/ARIA.png', 'assets/ARIA_Body.jpg', 'assets/ARIA_Body.jpg', 'assets/ARIA_Body.jpg'],
+    images: [
+      'assets/ARIA.png',
+      'assets/ARIA_Body.jpg',
+      'assets/ARIA_Body.jpg',
+      'assets/ARIA_Body.jpg',
+      'assets/DHSUD.png',
+    ],
     liveUrl: 'https://joshuasalcedo899-cmyk.github.io/blog',
-    githubUrl: 'https://github.com/joshuasalcedo899-cmyk/ARIA'
+    githubUrl: 'https://github.com/joshuasalcedo899-cmyk/ARIA',
   ),
   ProjectItem(
     id: 'mail-tracking',
     title: 'Automated Mail Tracker for DHSUD',
-    summary: 'A tracking system for managing departmental mail workflows and visibility.',
+    summary:
+        'A tracking system for managing departmental mail workflows and visibility.',
     description:
         'This project organizes mail-tracking workflows for the Department of Human Settlements and Urban Development, helping users follow the status of incoming and outgoing correspondence.',
     techStack: ['PHP', 'CSS', 'JavaScript', 'Node.js'],
