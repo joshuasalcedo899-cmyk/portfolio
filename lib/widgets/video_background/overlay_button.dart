@@ -20,62 +20,42 @@ class OverlayButton extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.all(24),
-      child: Align(
-        alignment: Alignment.bottomLeft,
-        child: AnimatedScale(
-          duration: const Duration(milliseconds: 180),
-          scale: isHighlighted ? 1.02 : 1,
-          alignment: Alignment.bottomLeft,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: textTheme.headlineMedium?.copyWith(
-                  color: foregroundColor,
-                  fontWeight: FontWeight.w800,
-                  height: 1.05,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isCompact = constraints.maxWidth < 720;
+
+          // On mobile: always show the text.
+          // On desktop: only show when highlighted.
+          final shouldShow = isCompact || isHighlighted;
+
+          return Align(
+            alignment: Alignment.bottomLeft,
+            child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 180),
+              opacity: shouldShow ? 1 : 0,
+              child: AnimatedScale(
+                duration: const Duration(milliseconds: 180),
+                scale: isHighlighted ? 1.02 : 1,
+                alignment: Alignment.bottomLeft,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: textTheme.headlineMedium?.copyWith(
+                        color: foregroundColor,
+                        fontWeight: FontWeight.w800,
+                        height: 1.05,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                  ],
                 ),
               ),
-              const SizedBox(height: 10),
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  color: accentColor.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: accentColor.withValues(alpha: 0.22),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 8,
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Open',
-                        style: TextStyle(
-                          color: accentColor,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const SizedBox(width: 6),
-                      Icon(
-                        Icons.arrow_forward_rounded,
-                        color: accentColor,
-                        size: 18,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }

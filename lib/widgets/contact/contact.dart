@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_testing/constants/app_colors.dart';
 import 'package:flutter_testing/widgets/contact/contact_text.dart';
 import 'package:url_launcher/url_launcher.dart';
 
