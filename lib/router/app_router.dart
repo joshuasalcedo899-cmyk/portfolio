@@ -10,7 +10,10 @@ final GoRouter appRouter = GoRouter(
   routes: [
     ShellRoute(
       builder: (context, state, child) {
-        return CenteredView(child: child);
+        return CenteredView(
+          width: 1200,
+          bottomPadding: 32,
+          child: child);
       },
       routes: [
         GoRoute(path: '/', builder: (context, state) => const HomeView()),
@@ -25,7 +28,10 @@ final GoRouter appRouter = GoRouter(
         return Scaffold(
           backgroundColor: AppColors.groupedBackground(context),
           body: SafeArea(
-            child: CenteredView(child: ProjectDetailPage(project: project)),
+            child: CenteredView(
+              width: double.infinity,
+              bottomPadding: 0,
+              child: ProjectDetailPage(project: project)),
           ),
         );
       },

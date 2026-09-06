@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_testing/constants/app_colors.dart';
 
 class AppTheme {
+  static const _fontFamily = 'Inter';
+
   static ThemeData build(Brightness brightness) {
     final isDark = brightness == Brightness.dark;
     final typography = Typography.material2021(platform: TargetPlatform.iOS);
-    final baseTextTheme = isDark ? typography.white : typography.black;
+    final baseTextTheme = (isDark ? typography.white : typography.black).apply(
+      fontFamily: _fontFamily,
+    );
 
     final scheme = ColorScheme.fromSeed(
       seedColor: AppColors.accent,
@@ -19,6 +23,7 @@ class AppTheme {
 
     return ThemeData(
       useMaterial3: true,
+      fontFamily: _fontFamily,
       brightness: brightness,
       colorScheme: scheme,
       scaffoldBackgroundColor: isDark
@@ -78,6 +83,7 @@ class AppTheme {
           backgroundColor: AppColors.accent,
           foregroundColor: CupertinoColors.white,
           textStyle: const TextStyle(
+            fontFamily: _fontFamily,
             fontSize: 15,
             fontWeight: FontWeight.w600,
             letterSpacing: 0,
@@ -91,6 +97,7 @@ class AppTheme {
           tapTargetSize: MaterialTapTargetSize.padded,
           foregroundColor: AppColors.accent,
           textStyle: const TextStyle(
+            fontFamily: _fontFamily,
             fontSize: 15,
             fontWeight: FontWeight.w600,
             letterSpacing: 0,
@@ -102,7 +109,11 @@ class AppTheme {
             ? CupertinoColors.secondarySystemFill.darkColor
             : CupertinoColors.secondarySystemFill.color,
         side: BorderSide(color: scheme.outlineVariant),
-        labelStyle: TextStyle(color: scheme.onSurface, letterSpacing: 0),
+        labelStyle: TextStyle(
+          color: scheme.onSurface,
+          fontFamily: _fontFamily,
+          letterSpacing: 0,
+        ),
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),

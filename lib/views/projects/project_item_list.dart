@@ -31,8 +31,8 @@ const List<ProjectItem> myProjects = [
     summary:
         'An augmented-reality assistant that brings information into the physical environment.',
     description:
-        'ARIA is an interactive assistant project that combines augmented reality and AI-driven conversation to make information easier to explore in context.',
-    techStack: ['Unity', 'C#', 'Python', 'AI', 'AR', 'Chatbot'],
+        'ARIA (An Informative Augmented Reality Assistant for Front Desk Information Services) is an AI-powered augmented reality assistant designed to improve information and navigation services within a campus environment. It allows users to interact with an AI chatbot to ask questions about campus information and receive visual assistance when locating rooms, offices, and other facilities. The system combines Augmented Reality, Artificial Intelligence, voice interaction, and real-time data management. Built with Unity and C#, ARIA provides the AR navigation experience, while a Python-based backend using FastAPI and PyTorch handles the AI chatbot, speech processing, and API services. Firebase Realtime Database is used for dynamically managing campus information, while QR codes provide an accessible way to initiate the AR experience.',
+    techStack: ['Unity', 'C#', 'Python', 'PyTorch', 'Firebase'],
     projectType: 'Augmented reality assistant',
     platform: 'Mobile',
     images: [

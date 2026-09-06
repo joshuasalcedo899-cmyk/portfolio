@@ -41,6 +41,8 @@ class HomeView extends StatelessWidget {
                   );
                 },
               ),
+              if(!isCompact)
+              const Contact(),
               ContainerBox(
                 'Skills',
                 'assets/keyboard.svg',
@@ -61,6 +63,7 @@ class HomeView extends StatelessWidget {
                   );
                 },
               ),
+              if(isCompact)
               const Contact(),
             ];
 

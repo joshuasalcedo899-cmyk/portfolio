@@ -1,7 +1,5 @@
 import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
-import 'package:flutter_testing/constants/app_colors.dart';
 import 'package:flutter_testing/widgets/modals/apple_dialog_scaffold.dart';
 import 'package:flutter_testing/widgets/modals/project_modal/project_card.dart';
 import 'package:flutter_testing/widgets/modals/project_modal/project_list.dart';
@@ -12,7 +10,8 @@ class ProjectView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppleDialogScaffold(
-      title: 'Projects',
+      backgroundColor: Colors.transparent,
+      title: 'PROJECTS',
       maxWidth: 1020,
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -27,9 +26,8 @@ class ProjectView extends StatelessWidget {
 
           return DecoratedBox(
             decoration: BoxDecoration(
-              color: AppColors.groupedBackground(context),
+              // color: AppColors.groupedBackground(context),
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: AppColors.separator(context)),
             ),
             child: SizedBox(
               height: math.min(MediaQuery.sizeOf(context).height * 0.62, 540),

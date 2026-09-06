@@ -91,12 +91,12 @@ class _VideoBackgroundState extends State<VideoBackground> {
                     ),
                   ),
                 ),
+                if(isHighlighted)
                 OverlayButton(
                   widget.title,
-                  isHighlighted: isHighlighted,
-                  foregroundColor: AppColors.label(context),
+                  foregroundColor: Colors.white,
                   accentColor: accentColor,
-                ),
+                )
               ],
             ),
           ),

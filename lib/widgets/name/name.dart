@@ -25,7 +25,6 @@ class Name extends StatelessWidget {
               height: 1.2,
             ),
           ),
-          const SizedBox(height: 8),
           Text(
             'Joshua Salcedo',
             style: textTheme.displaySmall?.copyWith(
@@ -34,6 +33,13 @@ class Name extends StatelessWidget {
               height: 1.05,
             ),
           ),
+          Text(
+            'Full Stack Developer | Web | Mobile',
+            style: textTheme.bodyMedium?.copyWith(
+              color: AppColors.secondaryLabel(context),
+              height: 1.2,
+            ),
+          )
         ],
       ),
     );

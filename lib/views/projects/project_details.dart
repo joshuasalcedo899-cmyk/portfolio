@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_testing/constants/app_colors.dart';
 import 'package:flutter_testing/views/projects/image_view.dart';
 import 'package:flutter_testing/views/projects/project_item_list.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -14,7 +15,7 @@ class ProjectDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.groupedBackground(context),
+      color: Colors.transparent,
       child: LayoutBuilder(
         builder: (context, constraints) {
           final isCompact = constraints.maxWidth < 760;
@@ -90,14 +91,6 @@ class _ProjectHeader extends StatelessWidget {
         ),
         const SizedBox(height: 30),
         Text(
-          project.projectType,
-          style: textTheme.labelLarge?.copyWith(
-            color: AppColors.accent,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
           project.title,
           style: (isCompact ? textTheme.headlineMedium : textTheme.displaySmall)
               ?.copyWith(
@@ -116,14 +109,6 @@ class _ProjectHeader extends StatelessWidget {
               height: 1.45,
             ),
           ),
-        ),
-        const SizedBox(height: 20),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: project.techStack
-              .map((tech) => _TechnologyPill(label: tech))
-              .toList(),
         ),
       ],
     );
@@ -163,30 +148,58 @@ class _CircleIconButton extends StatelessWidget {
   }
 }
 
-class _TechnologyPill extends StatelessWidget {
+class _TechnologyIcon extends StatelessWidget {
   final String label;
 
-  const _TechnologyPill({required this.label});
+  const _TechnologyIcon({required this.label});
+
+  static const _iconPaths = {
+    'unity': 'assets/stack/unity.svg',
+    'c#': 'assets/stack/c#.svg',
+    'python': 'assets/stack/python.svg',
+    'pytorch': 'assets/stack/pytorch.svg',
+    'firebase': 'assets/stack/firebase.svg',
+    'javascript': 'assets/stack/js.svg',
+    'php': 'assets/stack/php.svg',
+    'css': 'assets/stack/css3.svg',
+    'node.js': 'assets/stack/nodejs.svg',
+    'mysql': 'assets/stack/mysql.svg',
+
+  };
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: AppColors.secondaryGroupedBackground(context),
-        border: Border.all(color: AppColors.separator(context)),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-        child: Text(
-          label,
-          style: Theme.of(context).textTheme.labelLarge?.copyWith(
-            color: AppColors.label(context),
-            fontWeight: FontWeight.w600,
+    final iconPath = _iconPaths[label.trim().toLowerCase()];
+
+    return Tooltip(
+      message: label,
+      child: Semantics(
+        label: label,
+        image: true,
+        child: Container(
+          width: 46,
+          height: 46,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 29, 29, 29),
+            border: Border.all(color: AppColors.separator(context)),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: iconPath == null
+              ? Icon(
+                  CupertinoIcons.chevron_left_slash_chevron_right,
+                  color: AppColors.secondaryLabel(context),
+                  size: 24,
+                )
+              : SvgPicture.asset(
+                  iconPath,
+                  width: 28,
+                  height: 28,
+                  fit: BoxFit.contain,
+                ),
           ),
         ),
-      ),
-    );
+      );
   }
 }
 
@@ -575,7 +588,16 @@ class _ProjectFacts extends StatelessWidget {
           const _FactDivider(),
           _FactRow(label: 'Platform', value: project.platform),
           const _FactDivider(),
-          _FactRow(label: 'Stack', value: project.techStack.join(', ')),
+          _FactWidgetRow(
+            label: 'Stack',
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: project.techStack
+                  .map((technology) => _TechnologyIcon(label: technology))
+                  .toList(),
+            ),
+          ),
         ],
       ),
     );
@@ -620,6 +642,33 @@ class _FactRow extends StatelessWidget {
             ).textTheme.bodyMedium?.copyWith(color: AppColors.label(context)),
           ),
         ),
+      ],
+    );
+  }
+}
+
+class _FactWidgetRow extends StatelessWidget {
+  final String label;
+  final Widget child;
+
+  const _FactWidgetRow({required this.label, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 92,
+          child: Text(
+            label,
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+              color: AppColors.secondaryLabel(context),
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+        Expanded(child: child),
       ],
     );
   }

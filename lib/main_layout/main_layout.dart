@@ -7,6 +7,9 @@ class MainLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(child: CenteredView(child: child));
+    return Expanded(child: CenteredView(
+      width: 1200,
+      bottomPadding: 32,
+      child: child));
   }
 }

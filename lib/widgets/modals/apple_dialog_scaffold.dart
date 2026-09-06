@@ -5,12 +5,14 @@ class AppleDialogScaffold extends StatelessWidget {
   final String title;
   final Widget child;
   final double maxWidth;
+  final Color? backgroundColor;
 
   const AppleDialogScaffold({
     super.key,
     required this.title,
     required this.child,
     this.maxWidth = 640,
+    this.backgroundColor,
   });
 
   @override
@@ -19,7 +21,7 @@ class AppleDialogScaffold extends StatelessWidget {
 
     return Dialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-      backgroundColor: AppColors.secondaryGroupedBackground(context),
+      backgroundColor: backgroundColor,
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: ConstrainedBox(
